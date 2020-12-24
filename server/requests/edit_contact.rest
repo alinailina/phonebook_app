@@ -1,0 +1,8 @@
+@id = 
+PUT http://localhost:3001/api/contacts/{{id}}
+Content-Type: application/json
+
+{
+    "name": "Updated contact",
+    "number": "1234"
+}
