@@ -10,21 +10,22 @@ app.use(cors());
 
 const Contact = require("./models/contact");
 
+// Morgan middleware
 const morgan = require("morgan");
 app.use(morgan("tiny"));
 
-let contacts = [
-  {
-    id: 1,
-    name: "John Doe",
-    number: "1234",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-    number: "1234",
-  },
-];
+// let contacts = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     number: "1234",
+//   },
+//   {
+//     id: 2,
+//     name: "Jane Doe",
+//     number: "1234",
+//   },
+// ];
 
 app.get("/", (request, response) => {
   response.send("<h1>Phonebook app</h1>");
@@ -33,7 +34,7 @@ app.get("/", (request, response) => {
 // app.get("/info", (request, response) => {
 //   const total = contacts.length;
 //   const date = new Date();
-  
+
 //   response.send(`Phonebook has ${total} contacts as of ${date}`);
 // });
 
@@ -43,11 +44,11 @@ app.get("/info", (request, response) => {
   Contact.countDocuments()
     .then((total) => {
       response.send(`Phonebook has ${total} contacts as of ${date}`);
-    }) 
+    })
     // .catch((error) => {
     //   console.log(error);
     //   response.status(400).send();
-    //   // --> Bad request
+    //   // --> 400 Bad request
     // });
     .catch((error) => next(error));
 });
@@ -64,7 +65,7 @@ app.get("/api/contacts", (request, response) => {
     // .catch((error) => {
     //   console.log(error);
     //   response.status(400).send();
-    //   // --> Bad request
+    //   // --> 400 Bad request
     // });
     .catch((error) => next(error));
 });
@@ -87,43 +88,23 @@ app.get("/api/contacts/:id", (request, response, next) => {
         response.json(contact);
       } else {
         response.status(404).end();
-        // --> Not found
+        // --> 404 Not found
       }
     })
     // .catch(error => {
     //   console.log(error)
     //   response.status(400).end({ error: 'Malformatted id' })
-    //   // --> Bad request
+    //   // --> 400 Bad request
     // })
-    .catch((error) => next(error));
-});
-
-// app.delete("/api/contacts/:id", (request, response) => {
-//   const id = Number(request.params.id);
-//   contacts = contacts.filter((contact) => contact.id !== id);
-
-//   response.status(204).end();
-// });
-
-app.delete("/api/contacts/:id", (request, response) => {
-  Contact.findByIdAndRemove(request.params.id)
-    .then((result) => {
-      response.status(204).end();
-      // --> No Content
-    })
-    // .catch((error) => {
-    //   console.log(error);
-    //   response.status(400).end();
-    //   // --> Bad request
-    // });
     .catch((error) => next(error));
 });
 
 // app.post("/api/contacts", (request, response) => {
 //   const body = request.body;
 
-//   if (!body.name || !body.number) {
+//   if (body.name === undefined || body.number === undefined) {
 //     return response.status(400).json({
+//       // --> 400 Bad request
 //       error: "Info missing",
 //     });
 //   }
@@ -134,6 +115,7 @@ app.delete("/api/contacts/:id", (request, response) => {
 
 //   if (existingContact) {
 //     return response.status(403).json({
+//       // --> 403 Forbidden
 //       error: "Name must be unique",
 //     });
 //   }
@@ -150,32 +132,36 @@ app.delete("/api/contacts/:id", (request, response) => {
 
 app.post("/api/contacts", (request, response, next) => {
   const body = request.body;
-  console.log(request.body);
+  // console.log(request.body);
 
-  // if (!body.name || !body.number) {
+  // if (body.name === undefined || body.number === undefined) {
   //   return response.status(400).json({
-  //     // --> Bad request
+  //     // --> 400 Bad request
   //     error: "Info missing",
   //   });
   // }
+  // --> Moved validation to mongoose schema
 
   const contact = new Contact({
     name: body.name,
     number: body.number,
   });
 
-  contact.save().then((savedContact) => {
-    response.json(savedContact);
-  })
-  .catch(error => next(error))
+  contact
+    .save()
+    .then((savedContact) => {
+      response.json(savedContact);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/contacts/:id", (request, response) => {
   const body = request.body;
   // console.log(request.body);
 
-  if (!body.name || !body.number) {
+  if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({
+      // --> 400 Bad request
       error: "Info missing",
     });
   }
@@ -186,14 +172,35 @@ app.put("/api/contacts/:id", (request, response) => {
   };
 
   Contact.findByIdAndUpdate(request.params.id, updatedContact, { new: true })
+    // ---> By default, the updatedContact parameter receives the original document without the modifications. Optional { new: true } parameter causes the event handler to be called with the new modified document instead of the original.
     .then((updatedContact) => {
-      // ---> By default, the updatedNote parameter receives the original document without the modifications. Optional { new: true } parameter causes the event handler to be called with the new modified document instead of the original.
       response.json(updatedContact);
     })
     // .catch((error) => {
     //   console.log(error);
     //   response.status(400).end();
-    //   // --> Bad request
+    //   // --> 400 Bad request
+    // });
+    .catch((error) => next(error));
+});
+
+// app.delete("/api/contacts/:id", (request, response) => {
+//   const id = Number(request.params.id);
+//   contacts = contacts.filter((contact) => contact.id !== id);
+
+//   response.status(204).end();
+// });
+
+app.delete("/api/contacts/:id", (request, response) => {
+  Contact.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+      // --> 204 No Content
+    })
+    // .catch((error) => {
+    //   console.log(error);
+    //   response.status(400).send({ error: "Error deleting contact" });
+    //   // --> 400 Bad request
     // });
     .catch((error) => next(error));
 });
@@ -201,7 +208,6 @@ app.put("/api/contacts/:id", (request, response) => {
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ Error: "Unknown endpoint" });
 };
-
 app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
@@ -210,9 +216,9 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === "CastError") {
     console.log("Cast error");
     return response.status(400).send({ error: "Malformatted id" });
-  } else if (error.name === 'ValidationError') {
+  } else if (error.name === "ValidationError") {
     console.log("Validation error");
-    return response.status(400).json({ error: error.message })
+    return response.status(400).json({ error: error.message });
   }
 
   next(error);
