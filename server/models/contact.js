@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
-const password = process.argv[2];
-// const newName = process.argv[3];
-// const newNumber = process.argv[4];
+require("dotenv").config();
 
-const url = `mongodb+srv://user:${password}@cluster0.sysyf.gcp.mongodb.net/phonebook_app?retryWrites=true&w=majority`;
-
+const url = process.env.MONGODB_URI;
 mongoose
   .connect(url, {
     useNewUrlParser: true,
@@ -24,34 +22,19 @@ const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   number: {
     type: String,
     required: true,
   },
+  path: {
+    type: String,
+    required: true,
+  },
 });
 
-// const Contact = mongoose.model("Contact", contactSchema);
-
-// if (newName && newNumber) {
-//   const contact = new Contact({
-//     name: newName,
-//     number: newNumber,
-//   });
-
-//   contact.save().then((contact) => {
-//     console.log(`${contact.name} ${contact.number} was added to the phonebook`);
-//     mongoose.connection.close();
-//   });
-// } else {
-//   Contact.find({}).then((contact) => {
-//     contact.forEach((contact) => {
-//       console.log(contact);
-//     })
-
-//     mongoose.connection.close();
-//   });
-// }
+contactSchema.plugin(uniqueValidator);
 
 contactSchema.set("toJSON", {
   transform: (document, returnedObject) => {

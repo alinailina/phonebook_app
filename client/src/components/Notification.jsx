@@ -1,6 +1,7 @@
 import React from "react";
 
 const Notification = ({ message, err }) => {
+  console.log(message);
   const success = {
     color: "green",
   };

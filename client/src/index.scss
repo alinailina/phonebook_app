@@ -1,0 +1,309 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+
+@mixin phone {
+  @media only screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media only screen and (min-width: 769px) and (max-width: 1199px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media only screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin S {
+  font-size: 1rem;
+  @include tablet {
+    font-size: 1.1rem;
+  }
+  @include desktop {
+    font-size: 1.25vw;
+  }
+}
+
+@mixin L {
+  font-size: 1.25rem;
+  @include tablet {
+    font-size: 1.5rem;
+  }
+  @include desktop {
+    font-size: 2vw;
+  }
+}
+
+@mixin XL {
+  font-size: 1.5rem;
+  @include tablet {
+    font-size: 2rem;
+  }
+  @include desktop {
+    font-size: 3vw;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Open Sans", sans-serif;
+  @include S;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+input {
+  outline: none;
+  -webkit-appearance: none;
+  @include S;
+}
+
+::placeholder {
+  @include S;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav {
+  background-color: #f7f7f7;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  width: 100vw;
+  height: 100px;
+  padding: 0 25px;
+  @include desktop {
+    padding: 0 2vw;
+  }
+  display: flex;
+  align-items: center;
+
+  h1 {
+    @include XL;
+    width: 70%;
+    span {
+      display: block;
+      font-size: 0.75rem;
+    }
+  }
+
+  label {
+    border: 1px solid;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    @include L;
+    overflow: hidden;
+
+    // Search icon
+    span {
+      @include L;
+      position: relative;
+      top: 0.1em;
+      left: 0.25em;
+    }
+
+    input {
+      background-color: #f7f7f7;
+      width: 100%;
+      padding: 1vw;
+      border: none;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    h1 {
+      width: 35%;
+    }
+  }
+}
+
+main {
+  display: flex;
+
+  // Form
+  aside {
+    width: 30%;
+    position: sticky;
+    top: 100px;
+    height: calc(100vh - 100px);
+    padding: 25px;
+    @include desktop {
+      padding: 2vw;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    form,
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 25px;
+      input {
+        width: 100%;
+        margin: 25px 0;
+        padding: 1vw;
+        border: 1px solid black;
+        border-radius: 30px;
+      }
+      &:last-of-type {
+        padding: 0;
+        input {
+          border: none;
+        }
+      }
+    }
+    button {
+      border: none;
+      background-color: transparent;
+      outline: none;
+      cursor: pointer;
+      @include XL;
+    }
+  }
+
+  // Contacts
+  ul {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 25px;
+    @include desktop {
+      padding: 2vw;
+    }
+    li {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.25);
+      @include phone {
+        width: 45%;
+        margin: 25px auto;
+      }
+      @include tablet {
+        width: 45%;
+        margin: 25px auto;
+      }
+
+      @include desktop {
+        width: 30%;
+        max-height: 30vw;
+      }
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px;
+      margin-bottom: 50px;
+      @include desktop {
+        margin-bottom: 3vw;
+      }
+
+      // Delete
+      button {
+        border: none;
+        background-color: transparent;
+        outline: none;
+        cursor: pointer;
+        align-self: flex-end;
+        @include L;
+      }
+
+      // Img
+      > div:first-of-type {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 0 25px;
+        @include desktop {
+          margin: 0 0 2vw;
+        }
+
+        img {
+          width: 90%;
+          border-radius: 50%;
+        }
+      }
+
+      //Info
+      > div:nth-of-type(2) {
+        text-align: center;
+        line-height: 2;
+      }
+    }
+
+    .empty-flex-item {
+      @include phone {
+        width: 45%;
+        margin: 25px auto;
+      }
+      @include tablet {
+        width: 45%;
+        margin: 25px auto;
+      }
+
+      @include desktop {
+        width: 30%;
+      }
+      box-shadow: none;
+    }
+  }
+
+  @include phone {
+    flex-direction: column;
+
+    aside {
+      width: 100%;
+      background-color: #f7f7f7;
+      height: 250px;
+
+      form,
+      label {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 0;
+      }
+
+      label {
+        width: 48%;
+        input {
+          background-color: #f7f7f7;
+        }
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    ul {
+      width: 100%;
+    }
+  }
+}

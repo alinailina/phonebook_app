@@ -1,17 +1,38 @@
 import React from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 
-const Form = ({ onSubmit, name, handleName, number, handleNumber }) => {
+const Form = ({
+  onSubmit,
+  name,
+  handleName,
+  number,
+  handleNumber,
+  handleUpload,
+}) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} encType="multipart/form-data">
       <label>
-        Name:
-        <input type="text" value={name} onChange={handleName} />
+        <input
+          type="text"
+          value={name}
+          onChange={handleName}
+          placeholder="Add name"
+        />
       </label>
       <label>
-        Phone number:
-        <input type="number" value={number} onChange={handleNumber} />
+        <input
+          type="number"
+          value={number}
+          onChange={handleNumber}
+          placeholder="Add phone"
+        />
       </label>
-      <input className="button-primary" type="submit" value="Add contact" />
+      <label>
+        <input type="file" onChange={handleUpload} />
+      </label>
+      <button type="submit">
+        <AiOutlinePlus />
+      </button>
     </form>
   );
 };

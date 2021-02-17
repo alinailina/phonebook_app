@@ -1,21 +1,17 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/contacts";
+const baseUrl = "/api/contacts";
 
 const getAll = () => {
   return axios.get(baseUrl);
 };
 
-const add = (newContact) => {
-  return axios.post(baseUrl, newContact);
+const add = (formData) => {
+  return axios.post(baseUrl, formData);
 };
 
 const deleteContact = (id) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
-
-// const update = (index, updatedContact) => {
-//   return axios.put(`${baseUrl}/${index + 1}`, updatedContact);
-// };
 
 const update = (updatedContact) => {
   const { id } = updatedContact;
