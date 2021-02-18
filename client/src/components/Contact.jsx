@@ -2,8 +2,8 @@ import React from "react";
 import { IoMdClose } from "react-icons/io";
 
 const Contact = ({ contact, deleteContact }) => {
-  console.log(contact.path);
-  console.log(window.location.origin);
+  // console.log(contact.path);
+  // console.log(window.location.origin);
   return (
     <li>
       <button

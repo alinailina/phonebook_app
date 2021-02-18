@@ -33,6 +33,8 @@ const App = () => {
     setFile(e.target.files[0]);
   };
 
+  console.log(file);
+
   // Add contact
   const addContact = (e) => {
     e.preventDefault();
@@ -40,9 +42,9 @@ const App = () => {
     if (!newName || !newNumber || !file) {
       alert("Info is missing!");
     }
+    // console.log(file);
 
     let formData = new FormData();
-
     formData.append("name", newName);
     formData.append("number", newNumber);
     formData.append("image", file);
@@ -50,12 +52,12 @@ const App = () => {
 
     // Check if contact exists
     const existingContact = contacts.find(
-      (contact) => contact.name === formData.name
+      (contact) => contact.name === newName
     );
 
     if (existingContact) {
-      alert(`${formData.name} already exists! Update number?`);
-      const updatedContact = { ...existingContact, number: formData.name };
+      alert(`${newName} already exists! Update number?`);
+      const updatedContact = { ...existingContact, number: newNumber };
 
       contactsService.update(updatedContact).then((response) => {
         // console.log(response.data);
@@ -64,7 +66,7 @@ const App = () => {
             contact.id !== updatedContact.id ? contact : response.data
           )
         );
-        setMessage(`Updated ${updatedContact.name}'s number`);
+        setMessage(`Updated ${newName}'s number`);
         setTimeout(() => {
           setMessage(null);
         }, 3000);
@@ -74,7 +76,7 @@ const App = () => {
       contactsService.add(formData).then((response) => {
         setContacts(contacts.concat(response.data));
         console.log(response.data);
-        setMessage(`Added ${formData.name}`);
+        setMessage(`Added ${newName}`);
         setTimeout(() => {
           setMessage(null);
         }, 3000);
@@ -115,6 +117,7 @@ const App = () => {
             number={newNumber}
             handleName={handleName}
             handleNumber={handleNumber}
+            file={file}
             handleUpload={handleUpload}
           />
         </aside>
