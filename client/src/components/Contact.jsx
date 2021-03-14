@@ -2,8 +2,6 @@ import React from "react";
 import { IoMdClose } from "react-icons/io";
 
 const Contact = ({ contact, deleteContact }) => {
-  // console.log(contact.path);
-  // console.log(window.location.origin);
   return (
     <li>
       <button
@@ -14,9 +12,11 @@ const Contact = ({ contact, deleteContact }) => {
       >
         <IoMdClose />
       </button>
-      <div>
-        <img src={window.location.origin + `${contact.path}`} alt="profile" />
-      </div>
+      <div
+        style={{
+          backgroundImage: `url("${window.location.origin + contact.path}")`,
+        }}
+      ></div>
       <div>
         <h3>{contact.name}</h3>
         <p>{contact.number}</p>

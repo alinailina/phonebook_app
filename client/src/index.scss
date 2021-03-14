@@ -1,52 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
-
-@mixin phone {
-  @media only screen and (max-width: 768px) {
-    @content;
-  }
-}
-
-@mixin tablet {
-  @media only screen and (min-width: 769px) and (max-width: 1199px) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media only screen and (min-width: 1200px) {
-    @content;
-  }
-}
-
-@mixin S {
-  font-size: 1rem;
-  @include tablet {
-    font-size: 1.1rem;
-  }
-  @include desktop {
-    font-size: 1.25vw;
-  }
-}
-
-@mixin L {
-  font-size: 1.25rem;
-  @include tablet {
-    font-size: 1.5rem;
-  }
-  @include desktop {
-    font-size: 2vw;
-  }
-}
-
-@mixin XL {
-  font-size: 1.5rem;
-  @include tablet {
-    font-size: 2rem;
-  }
-  @include desktop {
-    font-size: 3vw;
-  }
-}
+@import "mixins";
 
 * {
   padding: 0;
@@ -235,18 +188,10 @@ main {
 
       // Img
       > div:first-of-type {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 0 25px;
-        @include desktop {
-          margin: 0 0 2vw;
-        }
-
-        img {
-          width: 90%;
-          border-radius: 50%;
-        }
+        background-size: cover;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
       }
 
       //Info
