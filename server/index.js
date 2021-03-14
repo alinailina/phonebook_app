@@ -5,8 +5,8 @@ const cors = require("cors");
 const app = express();
 
 app.use(express.static("build"));
+app.use(express.json());
 app.use(cors());
-//app.use(express.json());
 app.use(fileUpload());
 
 const Contact = require("./models/contact");
@@ -50,11 +50,6 @@ app.post("/api/contacts", (request, response, next) => {
   const { image } = request.files;
 
   image.mv("../client/public/uploads/" + image.name);
-  // const contact = {
-  //   name: name,
-  //   number: number,
-  //   image: image,
-  // };
 
   const contact = new Contact({
     name: name,
@@ -71,29 +66,29 @@ app.post("/api/contacts", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// app.put("/api/contacts/:id", (request, response, next) => {
-//   const body = request.body;
-//   // console.log(request.body);
+app.put("/api/contacts/:id", (request, response, next) => {
+  const body = request.body;
+  console.log(request.body);
 
-//   if (body.name === undefined || body.number === undefined) {
-//     return response.status(400).json({
-//       // --> 400 Bad request
-//       error: "Info missing",
-//     });
-//   }
+  if (body.name === undefined || body.number === undefined) {
+    return response.status(400).json({
+      // --> 400 Bad request
+      error: "Info missing",
+    });
+  }
 
-//   const updatedContact = {
-//     name: body.name,
-//     number: body.number,
-//   };
+  const updatedContact = {
+    name: body.name,
+    number: body.number,
+  };
 
-//   Contact.findByIdAndUpdate(request.params.id, updatedContact, { new: true })
-//     // ---> By default, the updatedContact parameter receives the original document without the modifications. Optional { new: true } parameter causes the event handler to be called with the new modified document instead of the original.
-//     .then((updatedContact) => {
-//       response.json(updatedContact);
-//     })
-//     .catch((error) => next(error));
-// });
+  Contact.findByIdAndUpdate(request.params.id, updatedContact, { new: true })
+    // ---> By default, the updatedContact parameter receives the original document without the modifications. Optional { new: true } parameter causes the event handler to be called with the new modified document instead of the original.
+    .then((updatedContact) => {
+      response.json(updatedContact);
+    })
+    .catch((error) => next(error));
+});
 
 app.delete("/api/contacts/:id", (request, response, next) => {
   Contact.findByIdAndRemove(request.params.id)
@@ -108,6 +103,7 @@ app.delete("/api/contacts/:id", (request, response, next) => {
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ Error: "Unknown endpoint" });
 };
+
 app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
